@@ -155,7 +155,7 @@ def main():
     size = (59, 500)
     seed = 'puffer_zipper'
     interval=0.05
-    pos = (15, 10)
+    pos = (15, 0)
     board = Board(size=size, seed=seed, interval=interval, initial_pos=pos)
 
     for _ in board.animate():
