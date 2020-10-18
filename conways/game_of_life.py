@@ -37,6 +37,7 @@ def plant_seed(seed, state, pos):
             'lwss':'lwss.csv',
             'mwss':'mwss.csv',
             'hwss':'hwss.csv',
+            'puffer_zipper':'puffer_zipper.csv',
             'r-pentomino':'r-pentomino.csv',
             'diehard':'diehard.csv',
             'acorn':'acorn.csv',
@@ -48,7 +49,7 @@ def plant_seed(seed, state, pos):
 
     still_lifes = ['block', 'eater', 'beehive', 'loaf', 'boat', 'tub']
     oscillators = ['blinker', 'toad', 'beacon', 'pulsar', 'pentadecathlon']
-    spaceships = ['glider', 'lwss', 'mwss', 'hwss']
+    spaceships = ['glider', 'lwss', 'mwss', 'hwss', 'puffer_zipper']
     methuselahs = ['r-pentomino', 'diehard', 'acorn']
     guns = ['gosper', 'simkin']
     configs = ['gosper-eater', 'tetrominoes']
@@ -151,10 +152,10 @@ class Engine(object):
 
 def main():
 
-    size = (50, 50)
-    seed = 'tetrominoes'
-    interval=2
-    pos = (20, 20)
+    size = (59, 500)
+    seed = 'puffer_zipper'
+    interval=0.05
+    pos = (15, 10)
     board = Board(size=size, seed=seed, interval=interval, initial_pos=pos)
 
     for _ in board.animate():
