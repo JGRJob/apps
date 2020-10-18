@@ -11,20 +11,84 @@ Rules:
 
 import numpy as np
 import matplotlib.pyplot as plt
-
 import argparse
 import time
+import csv
+import os
+import sys
 
+
+os.chdir(os.path.abspath(os.path.join(os.path.dirname(__file__))))
+
+def plant_seed(seed, state, pos):
+    seeds = {
+            'block':'block.csv',
+            'eater':'eater.csv',
+            'beehive':'beehive.csv',
+            'loaf':'loaf.csv',
+            'boat':'boat.csv',
+            'tub':'tub.csv',
+            'blinker':'blinker.csv',
+            'toad':'toad.csv',
+            'beacon':'beacon.csv',
+            'pulsar':'pulsar.csv',
+            'pentadecathlon':'pentadecathlon.csv',
+            'glider':'glider.csv',
+            'lwss':'lwss.csv',
+            'mwss':'mwss.csv',
+            'hwss':'hwss.csv',
+            'r-pentomino':'r-pentomino.csv',
+            'diehard':'diehard.csv',
+            'acorn':'acorn.csv',
+            'gosper':'gosper.csv',
+            'simkin':'simkin.csv',
+            'gosper-eater':'gosper-eater.csv',
+            'tetrominoes':'tetrominoes.csv'
+            }
+
+    still_lifes = ['block', 'eater', 'beehive', 'loaf', 'boat', 'tub']
+    oscillators = ['blinker', 'toad', 'beacon', 'pulsar', 'pentadecathlon']
+    spaceships = ['glider', 'lwss', 'mwss', 'hwss']
+    methuselahs = ['r-pentomino', 'diehard', 'acorn']
+    guns = ['gosper', 'simkin']
+    configs = ['gosper-eater', 'tetrominoes']
+
+    if seed in still_lifes:
+        pattern_file = os.getcwd() + '/patterns/still_lifes/' + seeds[seed]
+    elif seed in oscillators:
+        pattern_file = os.getcwd() + '/patterns/oscillators/' + seeds[seed]
+    elif seed in spaceships:
+        pattern_file = os.getcwd() + '/patterns/spaceships/' + seeds[seed]
+    elif seed in methuselahs:
+        pattern_file = os.getcwd() + '/patterns/methuselahs/' + seeds[seed]
+    elif seed in guns:
+        pattern_file = os.getcwd() + '/patterns/guns/' + seeds[seed]
+    elif seed in configs:
+        pattern_file = os.getcwd() + '/patterns/configs/' + seeds[seed]
+    else:
+        raise Exception(f'Seed "{seed}" is not implemented. Available seeds are {[i for i in seeds]}')
+    
+    with open (pattern_file, 'r') as f:
+        csv_reader = csv.reader(f)
+        for row in csv_reader:
+            state[int(row[0]) + pos[0], int(row[1]) + pos[1]] = 1
+    
 
 class Board(object):
 
-    def __init__(self, size=(100, 100), seed='Random'):
+    def __init__(self, size=(100, 100), seed='random', interval=0.1, initial_pos=(0,0)):
 
-        if seed == 'Random':
+        if seed == 'random':
             self.state = np.random.randint(2, size = size)
+
+        else:
+            self.state = np.zeros(size)
+            plant_seed(seed, self.state, pos=initial_pos)
 
         self.engine = Engine(self)
         self.iteration = 0
+        self.interval = interval
+        self.size = size
 
 
     def animate(self):
@@ -46,7 +110,7 @@ class Board(object):
 
             print('Life Cycle: {} Birth: {} Survive: {}'.format(i, self.engine.nBirth, self.engine.nSurvive))
             
-            plt.pause(0.05)
+            plt.pause(self.interval)
 
             yield self
 
@@ -86,9 +150,12 @@ class Engine(object):
 #-------------------------------------------------------------------------
 
 def main():
+
     size = (50, 50)
-    seed = 'Random'
-    board = Board(size=size, seed=seed)
+    seed = 'tetrominoes'
+    interval=2
+    pos = (20, 20)
+    board = Board(size=size, seed=seed, interval=interval, initial_pos=pos)
 
     for _ in board.animate():
         pass
